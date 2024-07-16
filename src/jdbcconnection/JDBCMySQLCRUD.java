@@ -1,8 +1,8 @@
 package jdbcconnection;
 
 import java.sql.Connection;
-
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,14 +18,14 @@ public class JDBCMySQLCRUD {
         String url = "jdbc:mysql://localhost:3306/minnudb";
         String username = "root"; 
         String password = "12345";
-        Connection connection = null;
 
         try {
-            connection = DriverManager.getConnection(url, username, password);
+            Connection connection = DriverManager.getConnection(url, username, password);
 
             Statement statement = connection.createStatement();
 
             String query = "SELECT * FROM minnutable";
+            
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -35,6 +35,18 @@ public class JDBCMySQLCRUD {
                 System.out.println("ID: " + id + ", Name: " + name);
             }
 
+            String insertQuery = "INSERT INTO minnutable (id, name) VALUES (3, 'Kavya')";
+            int rowsInserted = statement.executeUpdate(insertQuery);
+            if (rowsInserted > 0) {
+                System.out.println("A new record inserted successfully.");
+            }
+
+            String deleteQuery = "DELETE FROM minnutable WHERE id = 1";
+            int rowsDeleted = statement.executeUpdate(deleteQuery);
+            if (rowsDeleted > 0) {
+                System.out.println("The record was deleted successfully.");
+            }
+                        
             resultSet.close();
             statement.close();
             connection.close();

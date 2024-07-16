@@ -16,6 +16,7 @@ public class JDBCMySQLConnection {
 			Connection con = DriverManager.getConnection(url,username,password);
 			
 			System.out.println("Connection established");
+			
 		} catch(Exception e) {
 			System.out.println("Error Message :"+e.getMessage());
 		}
