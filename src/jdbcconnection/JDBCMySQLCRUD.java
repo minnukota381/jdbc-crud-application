@@ -2,10 +2,10 @@ package jdbcconnection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 public class JDBCMySQLCRUD {
     public static void main(String[] args) {
@@ -19,40 +19,70 @@ public class JDBCMySQLCRUD {
         String username = "root"; 
         String password = "12345";
 
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Select operation: ");
+        System.out.println("1. Select");
+        System.out.println("2. Insert");
+        System.out.println("3. Delete");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
-
             Statement statement = connection.createStatement();
 
-            String query = "SELECT * FROM minnutable";
-            
-            ResultSet resultSet = statement.executeQuery(query);
+            switch (choice) {
+                case 1:
+                    String selectQuery = "SELECT * FROM minnutable";
+                    ResultSet resultSet = statement.executeQuery(selectQuery);
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
+                    while (resultSet.next()) {
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("name");
+                        System.out.println("ID: " + id + ", Name: " + name);
+                    }
+                    resultSet.close();
+                    break;
 
-                System.out.println("ID: " + id + ", Name: " + name);
+                case 2:
+                    System.out.print("Enter ID to insert: ");
+                    int userInputId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print("Enter Name to insert: ");
+                    String userInputName = scanner.nextLine();
+
+                    String insertQuery = "INSERT INTO minnutable (id, name) VALUES (" + userInputId + ", '" + userInputName + "')";
+                    int rowsInserted = statement.executeUpdate(insertQuery);
+                    if (rowsInserted > 0) {
+                        System.out.println("A new record inserted successfully.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter ID to delete: ");
+                    int deleteId = scanner.nextInt();
+
+                    String deleteQuery = "DELETE FROM minnutable WHERE id = " + deleteId;
+                    int rowsDeleted = statement.executeUpdate(deleteQuery);
+                    if (rowsDeleted > 0) {
+                        System.out.println("The record was deleted successfully.");
+                    }
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+                    break;
             }
 
-            String insertQuery = "INSERT INTO minnutable (id, name) VALUES (3, 'Kavya')";
-            int rowsInserted = statement.executeUpdate(insertQuery);
-            if (rowsInserted > 0) {
-                System.out.println("A new record inserted successfully.");
-            }
-
-            String deleteQuery = "DELETE FROM minnutable WHERE id = 1";
-            int rowsDeleted = statement.executeUpdate(deleteQuery);
-            if (rowsDeleted > 0) {
-                System.out.println("The record was deleted successfully.");
-            }
-                        
-            resultSet.close();
             statement.close();
             connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            scanner.close();
         }
     }
 }
