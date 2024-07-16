@@ -15,7 +15,6 @@ public class JDBCPostgresConnection {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC Driver not found.");
             e.printStackTrace();
             return;
         }
@@ -28,7 +27,7 @@ public class JDBCPostgresConnection {
                 System.out.println("Failed to make connection!");
             }
         } catch (SQLException e) {
-\            e.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
