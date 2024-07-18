@@ -81,4 +81,22 @@ public class JDBCPostgresConnection {
             e.printStackTrace();
         }
     }
-}
+
+    private static void deleteoperation(Connection conn){
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter id: ");
+        int id = s.nextInt();
+        String sql = "DELETE FROM minnutable WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("A record has been deleted successfully.");
+            } else {
+                System.out.println("Delete operation failed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            }
+        }
+    }
