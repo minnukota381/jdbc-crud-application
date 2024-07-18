@@ -54,7 +54,7 @@ public class JDBCPostgresConnection {
         }
     }
 
-    private static void insertOperation(Connection conn) {
+    public static void insertOperation(Connection conn) {
         Scanner s = new Scanner(System.in);
 
         System.out.println("Enter id: ");
@@ -82,7 +82,7 @@ public class JDBCPostgresConnection {
         }
     }
 
-    private static void deleteoperation(Connection conn){
+    public static void deleteOperation(Connection conn){
         Scanner s = new Scanner(System.in);
         System.out.println("Enter id: ");
         int id = s.nextInt();
