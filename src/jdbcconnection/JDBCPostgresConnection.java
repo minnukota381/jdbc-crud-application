@@ -37,13 +37,13 @@ public class JDBCPostgresConnection {
                     insertOperation(conn);
                     break;
                 case 2:
-               	readOperation(con);
+               	readOperation(conn);
                     break;
                 case 3:
-               	updateOperation(con);
+               	updateOperation(conn);
                     break;
                 case 4:
-               	deleteoperation(con);
+               	deleteoperation(conn);
                     break;
                 default:
                     System.out.println("Invalid choice.");
