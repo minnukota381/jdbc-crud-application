@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet; 
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -26,8 +27,8 @@ public class JDBCPostgresConnection {
         System.out.println("Select operation: ");
         System.out.println("1. Insert");
         System.out.println("2. Select");
-        System.out.println("3. Delete");
-        System.out.println("4. Update");
+        System.out.println("3. Update");
+        System.out.println("4. Delete");
         int ch = scan.nextInt();
         scan.nextLine();
 
@@ -37,17 +38,31 @@ public class JDBCPostgresConnection {
                     insertOperation(conn);
                     break;
                 case 2:
-               	readOperation(conn);
+                    readOperation(conn);
                     break;
                 case 3:
-               	updateOperation(conn);
+                    // updateOperation(conn);
                     break;
                 case 4:
-               	deleteoperation(conn);
+                    deleteOperation(conn);
                     break;
                 default:
                     System.out.println("Invalid choice.");
                     break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void readOperation(Connection conn) {
+        String sql = "SELECT * FROM minnutable";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                System.out.println("ID: " + id + ", Name: " + name);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,8 +74,7 @@ public class JDBCPostgresConnection {
 
         System.out.println("Enter id: ");
         int id = s.nextInt();
-
-        s.nextLine();
+        s.nextLine(); // Consume newline character left in buffer
 
         System.out.println("Enter name: ");
         String name = s.nextLine();
@@ -82,21 +96,21 @@ public class JDBCPostgresConnection {
         }
     }
 
-    public static void deleteOperation(Connection conn){
+    public static void deleteOperation(Connection conn) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Enter id: ");
+        System.out.println("Enter id to delete: ");
         int id = s.nextInt();
         String sql = "DELETE FROM minnutable WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("A record has been deleted successfully.");
+                System.out.println("Record with ID " + id + " has been deleted successfully.");
             } else {
-                System.out.println("Delete operation failed.");
+                System.out.println("Delete operation failed. Record with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            }
         }
     }
+}
