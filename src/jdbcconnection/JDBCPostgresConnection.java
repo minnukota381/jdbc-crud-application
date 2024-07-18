@@ -56,9 +56,9 @@ public class JDBCPostgresConnection {
     }
 
     private static void readOperation(Connection conn) {
-        String sql = "SELECT * FROM minnutable";
+        String s = "SELECT * FROM minnutable";
         try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(s)) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
