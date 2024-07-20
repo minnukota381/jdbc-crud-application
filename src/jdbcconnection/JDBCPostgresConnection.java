@@ -41,7 +41,7 @@ public class JDBCPostgresConnection {
                     readOperation(conn);
                     break;
                 case 3:
-                    // updateOperation(conn);
+                    updateOperation(conn);
                     break;
                 case 4:
                     deleteOperation(conn);
@@ -49,6 +49,33 @@ public class JDBCPostgresConnection {
                 default:
                     System.out.println("Invalid choice.");
                     break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void updateOperation(Connection conn) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.println("Enter ID of the record to update: ");
+        int id = s.nextInt();
+        s.nextLine();
+
+        System.out.println("Enter new name: ");
+        String newName = s.nextLine();
+
+        String sql = "UPDATE minnutable SET name = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newName);
+            stmt.setInt(2, id);
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Record with ID " + id + " has been updated successfully.");
+            } else {
+                System.out.println("Update operation failed. Record with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +101,7 @@ public class JDBCPostgresConnection {
 
         System.out.println("Enter id: ");
         int id = s.nextInt();
-        s.nextLine(); // Consume newline character left in buffer
+        s.nextLine();
 
         System.out.println("Enter name: ");
         String name = s.nextLine();
